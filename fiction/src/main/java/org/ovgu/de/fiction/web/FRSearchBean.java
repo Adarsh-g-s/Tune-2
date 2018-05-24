@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -32,14 +33,12 @@ public class FRSearchBean implements Serializable {
 	private static long TIME;
 	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
 
-	private static final int MAX_QUESTION_NO = 3; // starts from 0
+	private static final int MAX_QUESTION_NO = 10; // starts from 0
 	private String question;
 	private String id;
 	private String image;
 	private boolean imagePresent;
 	List<Question> questions = new ArrayList<>();
-	List<Question> easyQuestions = new ArrayList();
-	List<Question> hardQuestions = new ArrayList();
 	String buttonname;
 	List<String> options = new ArrayList<>();
 	private String responseOption;
@@ -81,25 +80,13 @@ public class FRSearchBean implements Serializable {
 						.asList(FRGeneralUtils.getPropertyValTune2(i + ".q.options").split("#"));
 				String img = FRGeneralUtils.getPropertyValTune2(i + ".q.image");
 				imagePath = img.trim().length() > 1 ? "images/" + img : "";
-				isEasy = FRGeneralUtils.getPropertyValTune2(i + ".q.type").equals("e") ? true : false;
-				System.out.println("Is Easy" + isEasy);
+				isEasy = FRGeneralUtils.getPropertyValTune2(i + ".q.type") == "e" ? true : false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 			Question q = new Question(i, text, optionList, isEasy, imagePath);
 			System.out.println(q);
-			
-			//Easy Q and Hard Q
-			if(q.isEasy()) {
-				System.out.println("You are here!!");
-				easyQuestions.add(q);
-			}
-			else {
-				System.out.println("Bad Q");
-				hardQuestions.add(q);
-			}
-			
 			questions.add(q);
 		}
 		display();
@@ -146,14 +133,16 @@ public class FRSearchBean implements Serializable {
 		// int n = r.nextInt(counter--);
 
 		// TIME = System.currentTimeMillis();
-
+		//Randomize
+		Collections.shuffle(questions);
 		if (counter > MAX_QUESTION_NO) {
 			counter = 0;
 			//buttonname = "Finish";
 			image = "/images/thanks.jpg";
 			showQuiz = false;
 		} else {
-			/*Question questionDTO = questions.get(counter);
+			
+			Question questionDTO = questions.get(counter);
 			question = questionDTO.getText();
 			id = String.valueOf(questionDTO.getId());
 			relaxationGif = "2anim.gif";
@@ -161,7 +150,7 @@ public class FRSearchBean implements Serializable {
 			imagePresent = (image != null && image.trim().length() > 1) ? true : false;
 			options = questionDTO.getOptions();
 			System.out.println(counter);
-			System.out.println(questionDTO.toString());*/
+			System.out.println(questionDTO.toString());
 			counter++;
 			buttonname = "Next";
 		}
@@ -257,23 +246,5 @@ public class FRSearchBean implements Serializable {
 	public void setShowQuiz(boolean showQuiz) {
 		this.showQuiz = showQuiz;
 	}
-
-	public List<Question> getEasyQuestions() {
-		return easyQuestions;
-	}
-
-	public void setEasyQuestions(List<Question> easyQuestions) {
-		this.easyQuestions = easyQuestions;
-	}
-
-	public List<Question> getHardQuestions() {
-		return hardQuestions;
-	}
-
-	public void setHardQuestions(List<Question> hardQuestions) {
-		this.hardQuestions = hardQuestions;
-	}
-	
-	
 
 }
