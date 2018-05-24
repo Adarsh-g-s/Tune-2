@@ -8,12 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 import org.ovgu.de.fiction.utils.FRGeneralUtils;
 import org.ovgu.de.tune2.ui.Question;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
@@ -21,7 +24,7 @@ public class FRSearchBean implements Serializable {
 	/**
 	 * 
 	 */
-	private static final int RELAXATION_PERIOD = 10000; //10s
+	private static final int RELAXATION_PERIOD = 10000; // 10s
 
 	private static final long serialVersionUID = 462006850003220169L;
 
@@ -35,6 +38,8 @@ public class FRSearchBean implements Serializable {
 	private String image;
 	private boolean imagePresent;
 	List<Question> questions = new ArrayList<>();
+	List<Question> easyQuestions = new ArrayList();
+	List<Question> hardQuestions = new ArrayList();
 	String buttonname;
 	List<String> options = new ArrayList<>();
 	private String responseOption;
@@ -51,9 +56,20 @@ public class FRSearchBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		LOG.info("Init !!! ");
-		showQuiz=true;
+		showQuiz = true;
 		TIME = System.currentTimeMillis();
+		// init var
 		counter = 0;
+		question = null;
+		/*id = null;
+		image = null;
+		imagePresent = false;
+		buttonname = null;
+		options = null;
+		responseOption = null;
+		relaxationGif = null;
+		*/
+
 		for (int i = 0; i <= MAX_QUESTION_NO; i++) {
 			String text = null;
 			boolean isEasy = false;
@@ -65,62 +81,96 @@ public class FRSearchBean implements Serializable {
 						.asList(FRGeneralUtils.getPropertyValTune2(i + ".q.options").split("#"));
 				String img = FRGeneralUtils.getPropertyValTune2(i + ".q.image");
 				imagePath = img.trim().length() > 1 ? "images/" + img : "";
-				isEasy = FRGeneralUtils.getPropertyValTune2(i + ".q.type") == "e" ? true : false;
+				isEasy = FRGeneralUtils.getPropertyValTune2(i + ".q.type").equals("e") ? true : false;
+				System.out.println("Is Easy" + isEasy);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 			Question q = new Question(i, text, optionList, isEasy, imagePath);
 			System.out.println(q);
+			
+			//Easy Q and Hard Q
+			if(q.isEasy()) {
+				System.out.println("You are here!!");
+				easyQuestions.add(q);
+			}
+			else {
+				System.out.println("Bad Q");
+				hardQuestions.add(q);
+			}
+			
 			questions.add(q);
 		}
 		display();
 	}
 
+	public void capture() {
+		RequestContext context = RequestContext.getCurrentInstance();  
+	    context.addCallbackParam("myRadVal", responseOption);
+	    System.out.println("radioVal: "+responseOption);
+	}
 	/**
 	 * @throws Exception
 	 */
 	public void display() {
-		// FacesMessage fm = new FacesMessage(question + questions.size() +
-		// responseOption);
-		// FacesContext.getCurrentInstance().addMessage(question + questions.size() +
-		// responseOption, fm);
+		System.out.println(responseOption);
+		if (question != null) {
+			System.out.println("radioVal: "+responseOption);
+			if (responseOption == null || responseOption.length() < 1) {
+				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Please answer the question and then click on Next");
+				FacesContext.getCurrentInstance().addMessage("", fm);
+				//TIME = System.currentTimeMillis();
+				return;
+			}
 
-		long prevTime = TIME;
-		TIME = System.currentTimeMillis();
-		System.out.println("Time taken" + (TIME - prevTime) + new Date().toString());
-		// Random r = new Random(questions.size() - 1);
-		// int n = r.nextInt(counter--);
-		int count = 0;
-		TIME = System.currentTimeMillis();
+			long prevTime = TIME;
+			TIME = System.currentTimeMillis();
+			System.out
+					.println("Time taken to answer question " + id + " :" + (TIME - prevTime) + new Date().toString());
+
+			// start relaxation period
 			try {
 				Thread.sleep(RELAXATION_PERIOD);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (counter> MAX_QUESTION_NO) {
-				counter = 0;
-				buttonname = "Finish";
-				image = "/images/thanks.jpg";
-				showQuiz=false;
-			} else {
-				System.out.println("Relax for"+(System.currentTimeMillis()-TIME));
-				Question questionDTO = questions.get(counter);
-				question = questionDTO.getText();
-				id = String.valueOf(questionDTO.getId());
-				relaxationGif="2anim.gif";
-				image = questionDTO.getImagePath();
-				imagePresent = (image != null && image.trim().length() > 1) ? true : false;
-				options = questionDTO.getOptions();
-				System.out.println(counter);
-				System.out.println(questionDTO.toString());
-				counter++;
-				buttonname = "Next";
-			}
-		
-		
+			// end relaxation period
+			prevTime = TIME;
+			TIME = System.currentTimeMillis();
+			System.out.println("Time taken for relaxation :" + (TIME - prevTime) + new Date().toString());
+		}
+
+		// Random r = new Random(questions.size() - 1);
+		// int n = r.nextInt(counter--);
+
+		// TIME = System.currentTimeMillis();
+
+		if (counter > MAX_QUESTION_NO) {
+			counter = 0;
+			//buttonname = "Finish";
+			image = "/images/thanks.jpg";
+			showQuiz = false;
+		} else {
+			/*Question questionDTO = questions.get(counter);
+			question = questionDTO.getText();
+			id = String.valueOf(questionDTO.getId());
+			relaxationGif = "2anim.gif";
+			image = questionDTO.getImagePath();
+			imagePresent = (image != null && image.trim().length() > 1) ? true : false;
+			options = questionDTO.getOptions();
+			System.out.println(counter);
+			System.out.println(questionDTO.toString());*/
+			counter++;
+			buttonname = "Next";
+		}
+
 		System.out.println(showQuiz);
+		// new question timer starts
+		TIME = System.currentTimeMillis();
+		responseOption=null;
+
 	}
 
 	public String getQuestion() {
@@ -208,5 +258,22 @@ public class FRSearchBean implements Serializable {
 		this.showQuiz = showQuiz;
 	}
 
+	public List<Question> getEasyQuestions() {
+		return easyQuestions;
+	}
+
+	public void setEasyQuestions(List<Question> easyQuestions) {
+		this.easyQuestions = easyQuestions;
+	}
+
+	public List<Question> getHardQuestions() {
+		return hardQuestions;
+	}
+
+	public void setHardQuestions(List<Question> hardQuestions) {
+		this.hardQuestions = hardQuestions;
+	}
+	
+	
 
 }
