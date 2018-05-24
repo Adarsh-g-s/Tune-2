@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet name="css/style.css" />
+	<title>System</title>
+	<style>
+.ui-autocomplete-panel .ui-autocomplete-list {
+	padding: .4em;
+	border: 0 none;
+	overflow-y: scroll;
+	height: 400px;
+}
+</style>
+</h:head>
+
+<h:body
+	style="background-image: url(/fiction/resources/images/twitter.png);
+	opacity: 1.0;
+	filter: alpha(opacity = 100)">
+
+
+	<h:form id="form1" styleClass="table-form">
+		<p:outputPanel id="panel">
+			<p:panel header="" style="margin-bottom:10px;">
+				<p:lightBox styleClass="imagebox" id="lighbox1"
+					rendered="#{fRSearchBean.imagePresent}">
+					<h:graphicImage name="#{fRSearchBean.image}" id="nature1"
+						style="height: 450px; display: block; margin: 0 auto;"
+						rendered="#{fRSearchBean.showQuiz}" />
+						<h:graphicImage name="#{fRSearchBean.image}" id="nature2"
+					style="height: 730px;width: 1000px;" rendered="#{!fRSearchBean.showQuiz}" >
+				</h:graphicImage>
+				</p:lightBox>
+				<br/>
+				<p:outputLabel for="question" value="#{fRSearchBean.question}"
+					rendered="#{fRSearchBean.showQuiz}" />
+				<p:selectOneRadio id="question"
+					value="#{fRSearchBean.responseOption}" layout="responsive"
+					columns="2" rendered="#{fRSearchBean.showQuiz}">
+					<p:ajax event="change" listener="#{fRSearchBean.capture}" />
+					<f:selectItems value="#{fRSearchBean.options}" var="c"
+						itemLabel="#{option}" itemValue="#{option}" />
+				</p:selectOneRadio>
+			</p:panel>
+		</p:outputPanel>
+
+	</h:form>
+	
+	<h:form id="form" styleClass="search-form" rendered="#{fRSearchBean.showQuiz}">
+		<p:commandButton value="#{fRSearchBean.buttonname}"
+			action="#{fRSearchBean.display}" update=":form1:panel form"
+			icon="ui-icon-refresh">
+		</p:commandButton>
+		<p:messages id="messages" showDetail="true" closable="false">
+			<p:autoUpdate />
+		</p:messages>
+
+	</h:form>
+	<p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+		<f:facet name="default">
+		</f:facet>
+
+		<f:facet name="start">
+		</f:facet>
+
+		<f:facet name="complete">
+		</f:facet>
+	</p:ajaxStatus>
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		header="Loading" closable="false" resizable="false" showHeader="false">
+		<h:graphicImage library="images" name="#{fRSearchBean.relaxationGif}"
+			style="width: 600px;height: 600px; display: block; margin: 0 auto;" />
+	</p:dialog>
+
+</h:body>
+</html>
