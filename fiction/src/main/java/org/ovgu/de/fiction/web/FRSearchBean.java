@@ -33,12 +33,11 @@ public class FRSearchBean implements Serializable {
 
 	private static final long serialVersionUID = 462006850003220169L;
 
-	private static final String WEB_CONTEXT_PATH = "web.ctx.path";
 	private static long TIME;
 	private static long RELAX_TIME;
 	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
 
-	private static final int MAX_QUESTION_NO = 40; // starts from 0
+	private static int MAX_QUESTION_NO; // starts from 0
 	private String question;
 	private String id;
 	private String image;
@@ -73,6 +72,12 @@ public class FRSearchBean implements Serializable {
 		counter = 0;
 		imgCounter = 0;
 		question = null;
+		try {
+			MAX_QUESTION_NO = Integer.parseInt(FRGeneralUtils.getPropertyValTune2("question.no"));
+		} catch (NumberFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		for (int i = 0; i <= MAX_QUESTION_NO; i++) {
 			String text = null;
@@ -139,7 +144,7 @@ public class FRSearchBean implements Serializable {
 					+ endDateTime + "," + (TIME - prevTime) + "\n");
 
 			// start relaxation period
-			if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD) {
+			if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD && (counter <= MAX_QUESTION_NO)) {
 				try {
 					Thread.sleep(RELAXATION_PERIOD);
 				} catch (InterruptedException e) {
@@ -163,9 +168,12 @@ public class FRSearchBean implements Serializable {
 
 		if (counter > MAX_QUESTION_NO) {
 			counter = 0;
-			image = "/images/thanks.jpg";
-			showQuiz = false;
+			//imagePresent=true;
 			writeToFile(QUIZ_LOG.toString());
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/fiction/faces/thanku.xhtml");
+			//image = "images/thanks.jpg";
+			showQuiz = false;
+			
 		} else {
 			//startDateTime = new Date();
 			Question questionDTO = questions.get(counter);
