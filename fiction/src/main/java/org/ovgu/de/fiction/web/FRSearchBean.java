@@ -29,7 +29,7 @@ public class FRSearchBean implements Serializable {
 	 * 
 	 */
 	private static final int RELAXATION_PERIOD = 10000; // 10s
-	private static final int Q_A_PERIOD = 60000; // 10s
+	private static final int Q_A_PERIOD = 60000; // 60s
 
 	private static final long serialVersionUID = 462006850003220169L;
 
