@@ -38,7 +38,7 @@ public class FRSearchBean implements Serializable {
 	private static long RELAX_TIME;
 	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
 
-	private static final int MAX_QUESTION_NO = 3; // starts from 0
+	private static int MAX_QUESTION_NO; // starts from 0
 	private String question;
 	private String id;
 	private String image;
@@ -73,6 +73,12 @@ public class FRSearchBean implements Serializable {
 		counter = 0;
 		imgCounter = 0;
 		question = null;
+		try {
+			MAX_QUESTION_NO = Integer.parseInt(FRGeneralUtils.getPropertyValTune2("question.no"));
+		} catch (NumberFormatException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		for (int i = 0; i <= MAX_QUESTION_NO; i++) {
 			String text = null;
