@@ -38,7 +38,7 @@ public class FRSearchBean implements Serializable {
 	private static long RELAX_TIME;
 	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
 
-	private static final int MAX_QUESTION_NO = 3; // starts from 0
+	private static final int MAX_QUESTION_NO = 40; // starts from 0
 	private String question;
 	private String id;
 	private String image;
