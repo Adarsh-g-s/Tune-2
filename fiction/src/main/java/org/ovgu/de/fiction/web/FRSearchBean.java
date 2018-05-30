@@ -29,24 +29,19 @@ public class FRSearchBean implements Serializable {
 	 * 
 	 */
 	private static final String THANK_U_PAGE = "/fiction/faces/thanku.xhtml";
-
-	/**
-	 * 
-	 */
 	private static final String MID_BREAK_JPG = "images/Taking-a-break.jpg";
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 462006850003220169L;
 
 	private static final int RELAXATION_PERIOD = 10000; // 10s
-	private static final int Q_A_PERIOD = 60000; // 60s
+	private static final int Q_A_PERIOD = 10000; // 60s
 	private static long TIME;
 	private static long RELAX_TIME;
 	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
 	private static final int MID_BREAK_QUESTION_NO = 19;
 	String relaxationPicFolder;
+	private static int gifCounter;
+	private static String previousState;
 
 	private static int MAX_QUESTION_NO; // starts from 0
 	private String question;
@@ -93,6 +88,7 @@ public class FRSearchBean implements Serializable {
 		counter = 0;
 		midBreak = false;
 		question = null;
+		gifCounter = 1;
 
 		try {
 			MAX_QUESTION_NO = Integer.parseInt(FRGeneralUtils.getPropertyValTune2("question.no"));
@@ -134,9 +130,7 @@ public class FRSearchBean implements Serializable {
 	 * @throws Exception
 	 */
 	public void display() throws IOException {
-
-		long prevTime;
-
+		
 		if (question != null) {
 			// check if user has answered question
 			if (responseOption == null || responseOption.length() < 1) {
@@ -158,26 +152,22 @@ public class FRSearchBean implements Serializable {
 				// log for question ans b4 mid-break
 				updateTime(false);
 				return;
+
 			}
 			// check if mid-break question has been reached and mid-break given. Then
 			// proceed to next q
 			if (counter == MID_BREAK_QUESTION_NO && midBreak) {
 				// log mid-break time and update time var
 				updateTime(true);
+				//to prevent relaxation phase again starting!
+				RELAX_TIME = System.currentTimeMillis();
 			} else {
 				// log for Q
 				updateTime(false);
 			}
 			// start relaxation period
 			if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD && (counter <= MAX_QUESTION_NO)) {
-				try {
-					Thread.sleep(RELAXATION_PERIOD);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				RELAX_TIME = System.currentTimeMillis();
-				// time update for relaxation
-				updateTime(true);
+				provideRelaxation();
 			}
 		}
 
@@ -188,11 +178,9 @@ public class FRSearchBean implements Serializable {
 			showQuiz = false;
 
 		} else {
-			// startDateTime = new Date();
 			Question questionDTO = questions.get(counter);
 			question = questionDTO.getText();
 			id = String.valueOf(questionDTO.getId());
-			relaxationGif = relaxationPicFolder + "/0.jpg";
 			image = questionDTO.getImagePath();
 			imagePresent = (image != null && image.trim().length() > 1) ? true : false;
 			options = questionDTO.getOptions();
@@ -201,7 +189,6 @@ public class FRSearchBean implements Serializable {
 		}
 
 		// new question timer starts
-		prevTime = TIME;
 		TIME = System.currentTimeMillis();
 		endDateTime = startDateTime;
 		startDateTime = new Date();
@@ -235,12 +222,28 @@ public class FRSearchBean implements Serializable {
 
 	}
 
+	private void provideRelaxation() throws IOException {
+		int size = Integer.parseInt(FRGeneralUtils.getPropertyValTune2("relax.gif.no"));
+
+		System.out.println("Relaxation GIF is :" + relaxationGif);
+		try {
+			Thread.sleep(RELAXATION_PERIOD);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		RELAX_TIME = System.currentTimeMillis();
+		// time update for relaxation
+		updateTime(true);
+		gifCounter = gifCounter > size ? 1 : ++gifCounter;
+	}
+
 	/**
 	 * The method captures the response given by the user
 	 */
 	public void capture() {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.addCallbackParam("myRadVal", responseOption);
+		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
 	}
 
 	public String getQuestion() {
