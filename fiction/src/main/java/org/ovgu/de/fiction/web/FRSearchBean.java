@@ -28,32 +28,33 @@ public class FRSearchBean implements Serializable {
 	/**
 	 * 
 	 */
-	private static final int RELAXATION_PERIOD = 10000; // 10s
-	private static final int Q_A_PERIOD = 60000; // 60s
-
 	private static final long serialVersionUID = 462006850003220169L;
 
+	private static final int RELAXATION_PERIOD = 10000; // 10s
+	private static final int Q_A_PERIOD = 60000; // 60s
 	private static long TIME;
 	private static long RELAX_TIME;
 	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
+	private static final int MID_BREAK_QUESTION_NO = 19;
+	String relaxationPicFolder;
 
 	private static int MAX_QUESTION_NO; // starts from 0
 	private String question;
 	private String id;
 	private String image;
 	private boolean imagePresent;
-	List<Question> questions = new ArrayList<>();
+	List<Question> questions;
 	String buttonname;
-	List<String> options = new ArrayList<>();
+	List<String> options;
 	private String responseOption;
 	private String relaxationGif;
 	private boolean showQuiz;
 
 	private int counter;
-	private int imgCounter;
 	private StringBuffer QUIZ_LOG;
 	private Object startDateTime;
 	private Object endDateTime;
+	boolean midBreak;
 
 	/**
 	 * The method generates the Genre dropdown on page load
@@ -64,13 +65,20 @@ public class FRSearchBean implements Serializable {
 	public void init() {
 		LOG.info("Init !!! ");
 		showQuiz = true;
+		try {
+			relaxationPicFolder = FRGeneralUtils.getPropertyValTune2("relax.gif.folder");
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		QUIZ_LOG = new StringBuffer();
 		TIME = System.currentTimeMillis();
 		RELAX_TIME = System.currentTimeMillis();
 		startDateTime = new Date();
+		questions = new ArrayList<>();
 		// init var
 		counter = 0;
-		imgCounter = 0;
+		midBreak = false;
 		question = null;
 		try {
 			MAX_QUESTION_NO = Integer.parseInt(FRGeneralUtils.getPropertyValTune2("question.no"));
@@ -109,7 +117,6 @@ public class FRSearchBean implements Serializable {
 	public void capture() {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.addCallbackParam("myRadVal", responseOption);
-		// System.out.println("radioVal: " + responseOption);
 	}
 
 	/**
@@ -117,32 +124,57 @@ public class FRSearchBean implements Serializable {
 	 * @throws Exception
 	 */
 	public void display() throws IOException {
-		//endDateTime = startDateTime;
-		//startDateTime = new Date();
 
 		long prevTime;
 
 		if (question != null) {
-			// System.out.println("radioVal: " + responseOption);
 			if (responseOption == null || responseOption.length() < 1) {
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
 						"Please answer the question and then click on Next");
 				FacesContext.getCurrentInstance().addMessage("", fm);
-				// TIME = System.currentTimeMillis();
 				return;
 			}
 
-			// time update
-			prevTime = TIME;
-			TIME = System.currentTimeMillis();
-			endDateTime = startDateTime;
-			startDateTime = new Date();
-			
-			System.out.println(FRGeneralUtils.getPropertyValTune2(id + ".q.type") + "," + id + "," + startDateTime + ","
-					+ endDateTime + "," + (TIME - prevTime));
-			QUIZ_LOG.append(FRGeneralUtils.getPropertyValTune2(id + ".q.type") + "," + id + "," + startDateTime + ","
-					+ endDateTime + "," + (TIME - prevTime) + "\n");
+			if (counter == MID_BREAK_QUESTION_NO && !midBreak) {
+				imagePresent = true;
+				image = "images/Taking-a-break.jpg";
+				midBreak = true;
+				question = "";
+				options = null;
+				// time update
+				prevTime = TIME;
+				TIME = System.currentTimeMillis();
+				endDateTime = startDateTime;
+				startDateTime = new Date();
 
+				System.out.println(FRGeneralUtils.getPropertyValTune2(id + ".q.type") + "," + id + "," + startDateTime
+						+ "," + endDateTime + "," + (TIME - prevTime));
+				QUIZ_LOG.append(FRGeneralUtils.getPropertyValTune2(id + ".q.type") + "," + id + "," + startDateTime
+						+ "," + endDateTime + "," + (TIME - prevTime) + "\n");
+
+				return;
+			}
+			if (counter == MID_BREAK_QUESTION_NO && midBreak) {
+				prevTime = TIME;
+				TIME = System.currentTimeMillis();
+				endDateTime = startDateTime;
+				startDateTime = new Date();
+
+				System.out.println("R," + id + "," + startDateTime + "," + endDateTime + "," + (TIME - prevTime));
+				QUIZ_LOG.append("R," + id + "," + startDateTime + "," + endDateTime + "," + (TIME - prevTime) + "\n");
+			} else {
+
+				// time update
+				prevTime = TIME;
+				TIME = System.currentTimeMillis();
+				endDateTime = startDateTime;
+				startDateTime = new Date();
+
+				System.out.println(FRGeneralUtils.getPropertyValTune2(id + ".q.type") + "," + id + "," + startDateTime
+						+ "," + endDateTime + "," + (TIME - prevTime));
+				QUIZ_LOG.append(FRGeneralUtils.getPropertyValTune2(id + ".q.type") + "," + id + "," + startDateTime
+						+ "," + endDateTime + "," + (TIME - prevTime) + "\n");
+			}
 			// start relaxation period
 			if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD && (counter <= MAX_QUESTION_NO)) {
 				try {
@@ -163,23 +195,22 @@ public class FRSearchBean implements Serializable {
 				QUIZ_LOG.append(
 						"R," + id + "," + startDateTime + "," + new Date().toString() + "," + (TIME - prevTime) + "\n");
 			}
-
 		}
 
 		if (counter > MAX_QUESTION_NO) {
 			counter = 0;
-			//imagePresent=true;
+			// imagePresent=true;
 			writeToFile(QUIZ_LOG.toString());
 			FacesContext.getCurrentInstance().getExternalContext().redirect("/fiction/faces/thanku.xhtml");
-			//image = "images/thanks.jpg";
+			// image = "images/thanks.jpg";
 			showQuiz = false;
-			
+
 		} else {
-			//startDateTime = new Date();
+			// startDateTime = new Date();
 			Question questionDTO = questions.get(counter);
 			question = questionDTO.getText();
 			id = String.valueOf(questionDTO.getId());
-			relaxationGif = "2anim.gif";
+			relaxationGif = relaxationPicFolder+"/0h.jpg";
 			image = questionDTO.getImagePath();
 			imagePresent = (image != null && image.trim().length() > 1) ? true : false;
 			options = questionDTO.getOptions();
