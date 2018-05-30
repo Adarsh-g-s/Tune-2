@@ -31,9 +31,6 @@
 					rendered="#{fRSearchBean.imagePresent}">
 					<h:graphicImage name="#{fRSearchBean.image}" id="nature1"
 						style="height: 450px; display: block; margin: 0 auto;" />
-					<!--  <h:graphicImage name="#{fRSearchBean.image}" id="nature2"
-					style="height: 730px;width: 1000px;" rendered="#{!fRSearchBean.showQuiz}" >
-				</h:graphicImage>-->
 				</p:lightBox>
 				<br />
 				<p:outputLabel for="question" value="#{fRSearchBean.question}"
@@ -51,12 +48,11 @@
 
 	</h:form>
 
-	<h:form id="form" styleClass="search-form"
-		rendered="#{fRSearchBean.showQuiz}">
+	<h:form id="form" styleClass="search-form">
 		<h:panelGroup id="btnPanl">
 			<p:commandButton value="#{fRSearchBean.buttonname}" id="btn1"
 				action="#{fRSearchBean.display}" update=":form1:panel"
-				icon="ui-icon-refresh" process="@form" >
+				icon="ui-icon-refresh">
 			</p:commandButton>
 		</h:panelGroup>
 		<p:messages id="messages" showDetail="true" closable="false">
