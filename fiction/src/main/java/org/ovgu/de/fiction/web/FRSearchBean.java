@@ -46,7 +46,6 @@ public class FRSearchBean implements Serializable {
 	private String image;
 	private boolean imagePresent;
 	List<Question> questions;
-	String buttonname;
 	List<String> options;
 	private String responseOption;
 	private String relaxationGif;
@@ -106,7 +105,7 @@ public class FRSearchBean implements Serializable {
 				String img = FRGeneralUtils.getPropertyValTune2(i + ".q.image");
 				imagePath = img.trim().length() > 1 ? "images/" + img : "";
 				isEasy = FRGeneralUtils.getPropertyValTune2(i + ".q.type") == "e" ? true : false;
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				log.error("questions could not be loaded");
 			}
@@ -125,9 +124,11 @@ public class FRSearchBean implements Serializable {
 	/**
 	 * @throws IOException
 	 * @throws Exception
+	 *             The method contains the logic for navigation and all UI related
+	 *             stuff
 	 */
 	public void display() throws IOException {
-		
+
 		if (question != null) {
 			// check if user has answered question
 			if (responseOption == null || responseOption.length() < 1) {
@@ -137,8 +138,10 @@ public class FRSearchBean implements Serializable {
 				return;
 			}
 
-			// check if mid-break question has been reached and mid-break not given.Then
-			// give break
+			/**
+			 * check if mid-break question has been reached and mid-break not given.
+			 * Then give break
+			 */
 			if (counter == MID_BREAK_QUESTION_NO && !midBreak) {
 				// show only break pic
 				imagePresent = true;
@@ -151,23 +154,29 @@ public class FRSearchBean implements Serializable {
 				return;
 
 			}
-			// check if mid-break question has been reached and mid-break given. Then
-			// proceed to next q
+			
+			/**
+			 *  check if mid-break question has been reached and mid-break given.
+			 *  Then proceed to next q
+			 */
+			
 			if (counter == MID_BREAK_QUESTION_NO && midBreak) {
 				// log mid-break time and update time var
 				updateTime(true);
-				//to prevent relaxation phase again starting!
+				// to prevent relaxation phase starting again!
 				RELAX_TIME = System.currentTimeMillis();
 			} else {
 				// log for Q
 				updateTime(false);
 			}
+			
 			// start relaxation period
 			if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD && (counter <= MAX_QUESTION_NO)) {
 				provideRelaxation();
 			}
 		}
 
+		//if max no of questions reached write to file and display thanku page
 		if (counter > MAX_QUESTION_NO) {
 			counter = 0;
 			writeToFile(QUIZ_LOG.toString());
@@ -175,6 +184,7 @@ public class FRSearchBean implements Serializable {
 			showQuiz = false;
 
 		} else {
+			//init the next question and options
 			Question questionDTO = questions.get(counter);
 			question = questionDTO.getText();
 			id = String.valueOf(questionDTO.getId());
@@ -182,7 +192,6 @@ public class FRSearchBean implements Serializable {
 			imagePresent = (image != null && image.trim().length() > 1) ? true : false;
 			options = questionDTO.getOptions();
 			counter++;
-			buttonname = "Next";
 		}
 
 		// new question timer starts
@@ -231,7 +240,7 @@ public class FRSearchBean implements Serializable {
 		RELAX_TIME = System.currentTimeMillis();
 		// time update for relaxation
 		updateTime(true);
-		gifCounter = gifCounter > size ? 1 : ++gifCounter;
+		gifCounter = gifCounter > (size-1) ? 1 : ++gifCounter;
 	}
 
 	/**
@@ -303,14 +312,6 @@ public class FRSearchBean implements Serializable {
 
 	public void setImagePresent(boolean imagePresent) {
 		this.imagePresent = imagePresent;
-	}
-
-	public String getButtonname() {
-		return buttonname;
-	}
-
-	public void setButtonname(String buttonname) {
-		this.buttonname = buttonname;
 	}
 
 	public String getRelaxationGif() {
