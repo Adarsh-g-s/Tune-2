@@ -3,10 +3,8 @@ package org.ovgu.de.fiction.web;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,14 +32,13 @@ public class FRSearchBean implements Serializable {
 	private static final long serialVersionUID = 462006850003220169L;
 
 	private static final int RELAXATION_PERIOD = 10000; // 10s
-	private static final int Q_A_PERIOD = 10000; // 60s
+	private static final int Q_A_PERIOD = 60000; // 60s
 	private static long TIME;
 	private static long RELAX_TIME;
 	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
 	private static final int MID_BREAK_QUESTION_NO = 19;
 	String relaxationPicFolder;
 	private static int gifCounter;
-	private static String previousState;
 
 	private static int MAX_QUESTION_NO; // starts from 0
 	private String question;
@@ -240,6 +237,7 @@ public class FRSearchBean implements Serializable {
 	/**
 	 * The method captures the response given by the user
 	 */
+	@SuppressWarnings("deprecation")
 	public void capture() {
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.addCallbackParam("myRadVal", responseOption);
