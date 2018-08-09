@@ -1,4 +1,4 @@
-package org.ovgu.de.fiction.web;
+package org.ovgu.de.tune2.web;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,8 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
-import org.ovgu.de.fiction.utils.FRGeneralUtils;
 import org.ovgu.de.tune2.ui.Tweet;
+import org.ovgu.de.tune2.utils.FRGeneralUtils;
 import org.primefaces.context.RequestContext;
 
 @ManagedBean

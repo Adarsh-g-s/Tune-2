@@ -1,4 +1,4 @@
-package org.ovgu.de.fiction.utils;
+package org.ovgu.de.tune2.utils;
 
 import java.io.File;
 import java.io.IOException;
