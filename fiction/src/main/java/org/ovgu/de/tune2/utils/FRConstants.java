@@ -1,4 +1,4 @@
-package org.ovgu.de.fiction.utils;
+package org.ovgu.de.tune2.utils;
 
 /**
  * @author Suhita The interface contains constants used in the project

@@ -1,4 +1,4 @@
-package org.ovgu.de.fiction.web;
+package org.ovgu.de.tune2.web;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,17 +16,17 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.ovgu.de.fiction.utils.FRGeneralUtils;
 import org.ovgu.de.tune2.ui.Question;
+import org.ovgu.de.tune2.utils.FRGeneralUtils;
 import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class FRSearchBean implements Serializable {
+public class Phase1Bean implements Serializable {
 	/**
 	 * 
 	 */
-	private static final String THANK_U_PAGE = "/fiction/faces/thanku.xhtml";
+	private static final String THANK_U_PAGE = "/tune2web/faces/thanku.xhtml";
 	private static final String MID_BREAK_JPG = "images/Taking-a-break.jpg";
 
 	private static final long serialVersionUID = 462006850003220169L;
@@ -35,7 +35,7 @@ public class FRSearchBean implements Serializable {
 	private static final int Q_A_PERIOD = 60000; // 60s
 	private static long TIME;
 	private static long RELAX_TIME;
-	final static Logger LOG = Logger.getLogger(FRSearchBean.class);
+	final static Logger LOG = Logger.getLogger(Phase1Bean.class);
 	private static final int MID_BREAK_QUESTION_NO = 19;
 	String relaxationPicFolder;
 	private static int gifCounter;
@@ -57,7 +57,7 @@ public class FRSearchBean implements Serializable {
 	private Object endDateTime;
 	boolean midBreak;
 
-	private static Logger log = Logger.getLogger(FRSearchBean.class);
+	private static Logger log = Logger.getLogger(Phase1Bean.class);
 
 	/**
 	 * The method should be called at page load. Initializes questions and options
@@ -304,7 +304,7 @@ public class FRSearchBean implements Serializable {
 	}
 
 	public static void main(String[] args) throws IOException {
-		FRSearchBean fr = new FRSearchBean();
+		Phase1Bean fr = new Phase1Bean();
 		fr.init();
 	}
 

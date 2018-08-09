@@ -1,4 +1,4 @@
-package org.ovgu.de.fiction.web;
+package org.ovgu.de.tune2.web;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,8 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
-import org.ovgu.de.fiction.utils.FRGeneralUtils;
 import org.ovgu.de.tune2.ui.Tweet;
+import org.ovgu.de.tune2.utils.FRGeneralUtils;
 import org.primefaces.context.RequestContext;
 
 @ManagedBean
@@ -37,7 +37,7 @@ public class Phase2Bean implements Serializable {
 	private static final String NON_RELEVANT_OPT = "Non-Relevant";
 	private static final String RELEVANT_OPT = "Relevant";
 
-	private static final String THANK_U_PAGE = "/fiction/faces/thanku.xhtml";
+	private static final String THANK_U_PAGE = "/tune2web/faces/thanku.xhtml";
 	private static final String MID_BREAK_JPG = "images/Taking-a-break.jpg";
 
 	private static final int RELAXATION_PERIOD = 10000; // 10s
@@ -158,7 +158,7 @@ public class Phase2Bean implements Serializable {
 					e.printStackTrace();
 					log.error("tweets could not be loaded");
 				}
-				System.out.println(id);
+				//System.out.println(id);
 				Tweet twt = new Tweet(id.toString(), StringEscapeUtils.unescapeHtml4(text.toString()));
 				tweetList.add(twt);
 			}
@@ -192,7 +192,7 @@ public class Phase2Bean implements Serializable {
 	 *             stuff
 	 */
 	public void display() throws IOException {
-		System.out.println(relevant + factual + sentiment+counter);
+		//System.out.println(relevant + factual + sentiment+counter);
 
 		if (relevant == null && counter > 0) {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
@@ -225,7 +225,7 @@ public class Phase2Bean implements Serializable {
 				annotatedTwt.setSentiment(sentiment);
 
 			annotatedTweetList.add(annotatedTwt);
-			System.out.println(annotatedTwt.toString());
+			//System.out.println(annotatedTwt.toString());
 
 			/**
 			 * check if mid-break question has been reached and mid-break not given. Then
@@ -288,7 +288,7 @@ public class Phase2Bean implements Serializable {
 		TIME = System.currentTimeMillis();
 		endDateTime = startDateTime;
 		startDateTime = new Date();
-		System.out.println(counter);
+		//System.out.println(counter);
 
 	}
 
@@ -301,7 +301,7 @@ public class Phase2Bean implements Serializable {
 	}
 
 	private void updateTime(boolean relaxation) throws IOException {
-		System.out.println(relAnnotateTime + " " + factAnnotateTime + " " + TIME);
+		//System.out.println(relAnnotateTime + " " + factAnnotateTime + " " + TIME);
 		long start = TIME;
 		TIME = System.currentTimeMillis();
 		endDateTime = startDateTime;
@@ -363,7 +363,7 @@ public class Phase2Bean implements Serializable {
 		// context.addCallbackParam("myRadVal", responseOption);
 		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
 		relAnnotateTime = System.currentTimeMillis();
-		System.out.println(relevant);
+		//System.out.println(relevant);
 	}
 
 	/**
@@ -374,7 +374,7 @@ public class Phase2Bean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		// context.addCallbackParam("myRadVal", responseOption);
 		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
-		System.out.println(sentiment);
+		//System.out.println(sentiment);
 	}
 
 	/**
@@ -386,7 +386,7 @@ public class Phase2Bean implements Serializable {
 		// context.addCallbackParam("myRadVal", responseOption);
 		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
 		factAnnotateTime = System.currentTimeMillis();
-		System.out.println(factual);
+		//System.out.println(factual);
 	}
 
 	public String getRelaxationPicFolder() {
