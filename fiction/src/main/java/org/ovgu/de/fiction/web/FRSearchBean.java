@@ -67,57 +67,59 @@ public class FRSearchBean implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
-		LOG.info("Loading Questions and options !!! ");
-		showQuiz = true;
-		try {
-			relaxationPicFolder = FRGeneralUtils.getPropertyValTune2("relax.gif.folder");
-		} catch (IOException e2) {
-			e2.printStackTrace();
-			log.error("Relaxation gif not loaded!");
-		}
-		// init
-		QUIZ_LOG = new StringBuffer();
-		TIME = System.currentTimeMillis();
-		RELAX_TIME = System.currentTimeMillis();
-		startDateTime = new Date();
-		questions = new ArrayList<>();
-		counter = 0;
-		midBreak = false;
-		question = null;
-		gifCounter = 1;
-
-		try {
-			MAX_QUESTION_NO = Integer.parseInt(FRGeneralUtils.getPropertyValTune2("question.no"));
-		} catch (NumberFormatException | IOException e1) {
-			e1.printStackTrace();
-			log.error("MAX_QUESTION_NO not parsed!");
-		}
-
-		for (int i = 0; i <= MAX_QUESTION_NO; i++) {
-			String text = null;
-			boolean isEasy = false;
-			String imagePath = null;
-			List<String> optionList = null;
+		{
+			LOG.info("Loading Questions and options !!! ");
+			showQuiz = true;
 			try {
-				text = FRGeneralUtils.getPropertyValTune2(i + ".q.text");
-				optionList = (List<String>) Arrays
-						.asList(FRGeneralUtils.getPropertyValTune2(i + ".q.options").split("#"));
-				String img = FRGeneralUtils.getPropertyValTune2(i + ".q.image");
-				imagePath = img.trim().length() > 1 ? "images/" + img : "";
-				isEasy = FRGeneralUtils.getPropertyValTune2(i + ".q.type") == "e" ? true : false;
-			} catch (Exception e) {
-				e.printStackTrace();
-				log.error("questions could not be loaded");
+				relaxationPicFolder = FRGeneralUtils.getPropertyValPhase1("relax.gif.folder");
+			} catch (IOException e2) {
+				e2.printStackTrace();
+				log.error("Relaxation gif not loaded!");
+			}
+			// init
+			QUIZ_LOG = new StringBuffer();
+			TIME = System.currentTimeMillis();
+			RELAX_TIME = System.currentTimeMillis();
+			startDateTime = new Date();
+			questions = new ArrayList<>();
+			counter = 0;
+			midBreak = false;
+			question = null;
+			gifCounter = 1;
+
+			try {
+				MAX_QUESTION_NO = Integer.parseInt(FRGeneralUtils.getPropertyValPhase1("question.no"));
+			} catch (NumberFormatException | IOException e1) {
+				e1.printStackTrace();
+				log.error("MAX_QUESTION_NO not parsed!");
 			}
 
-			Question q = new Question(i, text, optionList, isEasy, imagePath);
-			questions.add(q);
-		}
-		try {
-			display();
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.error("exception at display()");
+			for (int i = 0; i <= MAX_QUESTION_NO; i++) {
+				String text = null;
+				boolean isEasy = false;
+				String imagePath = null;
+				List<String> optionList = null;
+				try {
+					text = FRGeneralUtils.getPropertyValPhase1(i + ".q.text");
+					optionList = (List<String>) Arrays
+							.asList(FRGeneralUtils.getPropertyValPhase1(i + ".q.options").split("#"));
+					String img = FRGeneralUtils.getPropertyValPhase1(i + ".q.image");
+					imagePath = img.trim().length() > 1 ? "images/" + img : "";
+					isEasy = FRGeneralUtils.getPropertyValPhase1(i + ".q.type") == "e" ? true : false;
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("questions could not be loaded");
+				}
+
+				Question q = new Question(i, text, optionList, isEasy, imagePath);
+				questions.add(q);
+			}
+			try {
+				display();
+			} catch (IOException e) {
+				e.printStackTrace();
+				log.error("exception at display()");
+			}
 		}
 	}
 
@@ -139,8 +141,8 @@ public class FRSearchBean implements Serializable {
 			}
 
 			/**
-			 * check if mid-break question has been reached and mid-break not given.
-			 * Then give break
+			 * check if mid-break question has been reached and mid-break not given. Then
+			 * give break
 			 */
 			if (counter == MID_BREAK_QUESTION_NO && !midBreak) {
 				// show only break pic
@@ -154,12 +156,12 @@ public class FRSearchBean implements Serializable {
 				return;
 
 			}
-			
+
 			/**
-			 *  check if mid-break question has been reached and mid-break given.
-			 *  Then proceed to next q
+			 * check if mid-break question has been reached and mid-break given. Then
+			 * proceed to next q
 			 */
-			
+
 			if (counter == MID_BREAK_QUESTION_NO && midBreak) {
 				// log mid-break time and update time var
 				updateTime(true);
@@ -169,14 +171,14 @@ public class FRSearchBean implements Serializable {
 				// log for Q
 				updateTime(false);
 			}
-			
+
 			// start relaxation period
 			if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD && (counter <= MAX_QUESTION_NO)) {
 				provideRelaxation();
 			}
 		}
 
-		//if max no of questions reached write to file and display thanku page
+		// if max no of questions reached write to file and display thanku page
 		if (counter > MAX_QUESTION_NO) {
 			counter = 0;
 			writeToFile(QUIZ_LOG.toString());
@@ -184,7 +186,7 @@ public class FRSearchBean implements Serializable {
 			showQuiz = false;
 
 		} else {
-			//init the next question and options
+			// init the next question and options
 			Question questionDTO = questions.get(counter);
 			question = questionDTO.getText();
 			id = String.valueOf(questionDTO.getId());
@@ -208,7 +210,7 @@ public class FRSearchBean implements Serializable {
 		endDateTime = startDateTime;
 		startDateTime = new Date();
 
-		String qType = relaxation ? "R" : FRGeneralUtils.getPropertyValTune2(id + ".q.type");
+		String qType = relaxation ? "R" : FRGeneralUtils.getPropertyValPhase1(id + ".q.type");
 		System.out.println(qType + "," + id + "," + startDateTime + "," + endDateTime + "," + (TIME - prevTime));
 		QUIZ_LOG.append(qType + "," + id + "," + startDateTime + "," + endDateTime + "," + (TIME - prevTime) + "\n");
 	}
@@ -223,13 +225,13 @@ public class FRSearchBean implements Serializable {
 		if (!(data.endsWith("/") || data.endsWith("\\"))) {
 			data.concat("/");
 		}
-		File file = new File(FRGeneralUtils.getPropertyValTune2("file.log.loc") + "LOG_" + System.currentTimeMillis());
+		File file = new File(FRGeneralUtils.getPropertyValPhase1("file.log.loc") + "LOG_" + System.currentTimeMillis());
 		FileUtils.writeStringToFile(file, data);
 
 	}
 
 	private void provideRelaxation() throws IOException {
-		int size = Integer.parseInt(FRGeneralUtils.getPropertyValTune2("relax.gif.no"));
+		int size = Integer.parseInt(FRGeneralUtils.getPropertyValPhase1("relax.gif.no"));
 
 		System.out.println("Relaxation GIF is :" + relaxationGif);
 		try {
@@ -240,7 +242,7 @@ public class FRSearchBean implements Serializable {
 		RELAX_TIME = System.currentTimeMillis();
 		// time update for relaxation
 		updateTime(true);
-		gifCounter = gifCounter > (size-1) ? 1 : ++gifCounter;
+		gifCounter = gifCounter > (size - 1) ? 1 : ++gifCounter;
 	}
 
 	/**

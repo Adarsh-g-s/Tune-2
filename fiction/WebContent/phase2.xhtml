@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet name="css/style.css" />
+	<title>System</title>
+	<style>
+.ui-autocomplete-panel .ui-autocomplete-list {
+	padding: .4em;
+	border: 0 none;
+	overflow-y: scroll;
+	height: 400px;
+}
+</style>
+</h:head>
+
+<h:body
+	style="background-image: url(/fiction/resources/images/twitter.png);
+	opacity: 1.0;
+	filter: alpha(opacity = 100)">
+
+
+	<h:form id="form1" styleClass="table-form">
+		<p:outputPanel id="panel">
+			
+			<p:panel header="Tweet Annotation" style="margin-bottom:10px;">
+				<p:outputLabel value="#{phase2Bean.tweetText}"
+					rendered="#{phase2Bean.showQuiz}" />
+				<p:separator />
+				
+				<p:selectOneRadio id="rel" value="#{phase2Bean.relevant}"
+					layout="responsive" columns="2" rendered="#{phase2Bean.showQuiz}">
+					<p:ajax event="change" listener="#{phase2Bean.captureRelevance}"
+						update=":form1:btnPanl1,:form1:btnPanlSenti" />
+					<f:selectItems value="#{phase2Bean.relevantOptions}" var="c"
+						itemLabel="#{option}" itemValue="#{option}" />
+				</p:selectOneRadio>
+				
+				<h:panelGroup id="btnPanl1">
+					<p:separator
+						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant'}" />
+
+					<p:outputLabel value="If Relevant,then which label is more suitable? "
+						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant'}" />
+					<p:selectOneRadio id="fac" value="#{phase2Bean.factual}"
+						layout="responsive" columns="2"
+						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant'}">
+						<p:ajax event="change" listener="#{phase2Bean.captureFactual}"
+							update=":form1:btnPanlSenti" />
+						<f:selectItems value="#{phase2Bean.factualOptions}" var="d"
+							itemLabel="#{foption}" itemValue="#{foption}" />
+					</p:selectOneRadio>
+				</h:panelGroup>
+
+				<h:panelGroup id="btnPanlSenti">
+					<p:separator
+						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant'}" />
+					<p:outputLabel value="If Relevant and Factual,then which label is more suitable? "
+						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant'}" />
+					<p:selectOneRadio id="senti" value="#{phase2Bean.sentiment}"
+						layout="responsive" columns="2"
+						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant'}">
+						<p:ajax event="change" listener="#{phase2Bean.captureSentiment}"
+							update=":form" />
+						<f:selectItems value="#{phase2Bean.sentiOptions}" var="e"
+							itemLabel="#{soption}" itemValue="#{soption}" />
+					</p:selectOneRadio>
+				</h:panelGroup>
+			</p:panel>
+
+		</p:outputPanel>
+
+	</h:form>
+
+	<h:form id="form" styleClass="search-form">
+		<h:panelGroup id="btnPanl">
+			<p:commandButton value="Next" id="btn1"
+				action="#{phase2Bean.display}" update=":form1:panel"
+				icon="ui-icon-refresh">
+			</p:commandButton>
+		</h:panelGroup>
+		<p:messages id="messages" showDetail="true" closable="false">
+			<p:autoUpdate />
+		</p:messages>
+
+	</h:form>
+	<p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+		<f:facet name="default">
+		</f:facet>
+
+		<f:facet name="start">
+		</f:facet>
+
+		<f:facet name="complete">
+		</f:facet>
+	</p:ajaxStatus>
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		header="Loading" closable="false" resizable="false" showHeader="false">
+		<h:graphicImage library="images" name="#{phase2Bean.relaxationGif}"
+			style="width: 600px;height: 600px; display: block; margin: 0 auto;" />
+		<p:autoUpdate></p:autoUpdate>
+	</p:dialog>
+
+</h:body>
+</html>
