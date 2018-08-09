@@ -131,7 +131,7 @@ public class Phase2Bean implements Serializable {
 				if (content != null && !content.trim().equals("")) {
 					try {
 						twtCtr = Integer.parseInt(content);
-						if (twtCtr == 9)
+						if (twtCtr == 10)
 							twtCtr = 0;
 					} catch (Exception e) {
 						LOG.error("tweet counter content not valid and not an integer!" + e.getMessage());
