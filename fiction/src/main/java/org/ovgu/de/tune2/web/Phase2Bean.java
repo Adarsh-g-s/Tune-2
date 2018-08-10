@@ -80,7 +80,7 @@ public class Phase2Bean implements Serializable {
 	private Object endDateTime;
 	boolean midBreak;
 
-	private int twtCtr;
+	private Integer twtCtr;
 
 	private static Logger log = Logger.getLogger(Phase2Bean.class);
 
@@ -131,7 +131,7 @@ public class Phase2Bean implements Serializable {
 				if (content != null && !content.trim().equals("")) {
 					try {
 						twtCtr = Integer.parseInt(content);
-						if (twtCtr == 10)
+						if (twtCtr.equals(10))
 							twtCtr = 0;
 					} catch (Exception e) {
 						LOG.error("tweet counter content not valid and not an integer!" + e.getMessage());
