@@ -29,7 +29,7 @@
 			
 			<p:panel header="Tweet Annotation" style="margin-bottom:10px;">
 				<p:outputLabel value="#{phase2Bean.tweetText}"
-					rendered="#{phase2Bean.showQuiz}" />
+					rendered="#{phase2Bean.showQuiz}" escape="false"/>
 				<p:separator />
 				
 				<p:selectOneRadio id="rel" value="#{phase2Bean.relevant}"
