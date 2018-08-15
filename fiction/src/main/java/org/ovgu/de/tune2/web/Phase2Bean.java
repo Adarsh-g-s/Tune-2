@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.ovgu.de.tune2.ui.Tweet;
 import org.ovgu.de.tune2.utils.Utility;
-import org.primefaces.context.RequestContext;
 
 /**
  * @author Suhita Ghosh

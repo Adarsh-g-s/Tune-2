@@ -2,7 +2,6 @@ package org.ovgu.de.tune2.ui;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 
@@ -14,6 +13,7 @@ import java.util.Map;
  */
 public class Question implements Serializable {
 
+	private static final long serialVersionUID = 8504104824817499398L;
 	private int id;
 	private String text;
 	private List<String> options;

@@ -11,6 +11,10 @@ import java.util.List;
  *
  */
 public class Answer implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3279988271961764680L;
 	private int id;
 	private List<String> options;
 
