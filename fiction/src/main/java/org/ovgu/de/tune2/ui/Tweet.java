@@ -11,9 +11,6 @@ import java.io.Serializable;
  */
 public class Tweet implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2275154356020676474L;
 	private String id;
 	private String text;

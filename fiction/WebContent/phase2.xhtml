@@ -29,12 +29,18 @@
 		<p:outputPanel id="panel">
 			
 			<p:panel header="Tweet Annotation" style="margin-bottom:10px;">
+			<p:lightBox styleClass="imagebox" id="lighbox1"
+					rendered="#{phase2Bean.midBreak}">
+					<h:graphicImage name="#{phase2Bean.image}" id="nature1"
+						style="height: 450px; display: block; margin: 0 auto;" />
+				</p:lightBox>
+				<br />
 				<p:outputLabel value="#{phase2Bean.tweetText}"
-					rendered="#{phase2Bean.showQuiz}" escape="false"/>
+					rendered="#{phase2Bean.showQuiz and !phase2Bean.midBreak}" escape="false"/>
 				<p:separator />
 				
 				<p:selectOneRadio id="rel" value="#{phase2Bean.relevant}"
-					layout="responsive" columns="2" rendered="#{phase2Bean.showQuiz}">
+					layout="responsive" columns="2" rendered="#{phase2Bean.showQuiz  and !phase2Bean.midBreak}">
 					<p:ajax event="change" listener="#{phase2Bean.captureRelevance}"
 						update=":form1:btnPanl1,:form1:btnPanlSenti" />
 					<f:selectItems value="#{phase2Bean.relevantOptions}" var="c"
@@ -43,13 +49,13 @@
 				
 				<h:panelGroup id="btnPanl1">
 					<p:separator
-						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant'}" />
+						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant'  and !phase2Bean.midBreak}" />
 
 					<p:outputLabel value="If Relevant,then which label is more suitable? "
-						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant'}" />
+						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant' and !phase2Bean.midBreak}" />
 					<p:selectOneRadio id="fac" value="#{phase2Bean.factual}"
 						layout="responsive" columns="2"
-						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant'}">
+						rendered="#{phase2Bean.showQuiz and phase2Bean.relevant eq 'Relevant' and !phase2Bean.midBreak}">
 						<p:ajax event="change" listener="#{phase2Bean.captureFactual}"
 							update=":form1:btnPanlSenti" />
 						<f:selectItems value="#{phase2Bean.factualOptions}" var="d"
@@ -59,12 +65,12 @@
 
 				<h:panelGroup id="btnPanlSenti">
 					<p:separator
-						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant'}" />
+						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant' and !phase2Bean.midBreak}" />
 					<p:outputLabel value="If Relevant and Factual,then which label is more suitable? "
-						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant'}" />
+						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant' and !phase2Bean.midBreak}" />
 					<p:selectOneRadio id="senti" value="#{phase2Bean.sentiment}"
 						layout="responsive" columns="2"
-						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant'}">
+						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant' and !phase2Bean.midBreak}">
 						<p:ajax event="change" listener="#{phase2Bean.captureSentiment}"
 							update=":form" />
 						<f:selectItems value="#{phase2Bean.sentiOptions}" var="e"

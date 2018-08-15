@@ -19,9 +19,9 @@ import org.apache.log4j.Logger;
 /**
  * This is utility class for file operations
  */
-public class FRFileOperationUtils {
+public class Tune2FileOperationUtils {
 
-	private static Logger LOG = Logger.getLogger(FRFileOperationUtils.class);
+	private static Logger LOG = Logger.getLogger(Tune2FileOperationUtils.class);
 
 	/**
 	 * @return

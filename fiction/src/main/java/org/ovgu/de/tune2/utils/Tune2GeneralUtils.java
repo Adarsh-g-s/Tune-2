@@ -11,7 +11,7 @@ import java.util.Properties;
 /**
  * The class is a utility class.
  */
-public class FRGeneralUtils {
+public class Tune2GeneralUtils {
 	
 	/**
 	 * @param propName
@@ -23,8 +23,8 @@ public class FRGeneralUtils {
 		Properties prop = new Properties();
 
 		//InputStream input = new FileInputStream(FRConstants.PROPERTIES_FILE_LOC + FRConstants.CONFIG_FILE);
-		 InputStream input = FRFileOperationUtils.class.getClassLoader()
-	                .getResourceAsStream(FRConstants.CONFIG_FILE_PHASE1);
+		 InputStream input = Tune2FileOperationUtils.class.getClassLoader()
+	                .getResourceAsStream(Tune2Constants.CONFIG_FILE_PHASE1);
 
 		prop.load(input);
 		return (prop.getProperty(propName));
@@ -40,8 +40,8 @@ public class FRGeneralUtils {
 		Properties prop = new Properties();
 
 		//InputStream input = new FileInputStream(FRConstants.PROPERTIES_FILE_LOC + FRConstants.CONFIG_FILE);
-		 InputStream input = FRFileOperationUtils.class.getClassLoader()
-	                .getResourceAsStream(FRConstants.CONFIG_FILE_PHASE2);
+		 InputStream input = Tune2FileOperationUtils.class.getClassLoader()
+	                .getResourceAsStream(Tune2Constants.CONFIG_FILE_PHASE2);
 
 		prop.load(input);
 		return (prop.getProperty(propName));

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +20,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.ovgu.de.tune2.ui.Tweet;
-import org.ovgu.de.tune2.utils.FRGeneralUtils;
+import org.ovgu.de.tune2.utils.Tune2GeneralUtils;
 import org.primefaces.context.RequestContext;
+
+/**
+ * @author Suhita Ghosh
+ *
+ */
 
 @ManagedBean
 @ViewScoped
@@ -45,7 +51,7 @@ public class Phase2Bean implements Serializable {
 	private static long TIME;
 	private static long RELAX_TIME;
 	final static Logger LOG = Logger.getLogger(Phase2Bean.class);
-	private static final int MID_BREAK_TWEET_NO = 300;
+	private static final int MID_BREAK_TWEET_NO = 25;
 	String relaxationPicFolder;
 	private static int gifCounter;
 
@@ -57,13 +63,6 @@ public class Phase2Bean implements Serializable {
 	private String sentiment;
 	private Long relAnnotateTime;
 	private Long factAnnotateTime;
-
-	/*
-	 * 
-	 * private boolean imagePresent;
-	 * 
-	 * List<String> options; private String responseOption;
-	 */
 	private String image;
 	List<Tweet> tweetList;
 	List<Tweet> annotatedTweetList;
@@ -93,10 +92,10 @@ public class Phase2Bean implements Serializable {
 	@PostConstruct
 	public void init() {
 		{
-			LOG.info("Loading Questions and options !!! ");
+			LOG.info("Loading Tweets !!! ");
 			showQuiz = true;
 			try {
-				relaxationPicFolder = FRGeneralUtils.getPropertyValPhase2("relax.gif.folder");
+				relaxationPicFolder = Tune2GeneralUtils.getPropertyValPhase2("relax.gif.folder");
 			} catch (IOException e2) {
 				e2.printStackTrace();
 				log.error("Relaxation gif not loaded!");
@@ -119,7 +118,7 @@ public class Phase2Bean implements Serializable {
 			// create file for tweet counter
 			try {
 				{
-					twtCtrFileName = FRGeneralUtils.getPropertyValPhase2("file.log.loc") + "twtCtr";
+					twtCtrFileName = Tune2GeneralUtils.getPropertyValPhase2("file.log.loc") + "twtCtr";
 					tfile = new File(twtCtrFileName);
 					tfile.createNewFile();
 				}
@@ -139,7 +138,7 @@ public class Phase2Bean implements Serializable {
 				} else {
 					twtCtr = 0;
 				}
-				MAX_TWEET_NO = Integer.parseInt(FRGeneralUtils.getPropertyValPhase2("tweet.no"));
+				MAX_TWEET_NO = Integer.parseInt(Tune2GeneralUtils.getPropertyValPhase2("tweet.no"));
 			} catch (NumberFormatException | IOException e1) {
 				e1.printStackTrace();
 				log.error("MAX_TWEET_NO not parsed!");
@@ -150,19 +149,17 @@ public class Phase2Bean implements Serializable {
 			for (int i = start; i < end; i++) {
 				StringBuffer text = null;
 				StringBuffer id = null;
-				// String imagePath = null;
 				try {
-					text = new StringBuffer(FRGeneralUtils.getPropertyValPhase2(i + ".twt.text"));
-					id = new StringBuffer(FRGeneralUtils.getPropertyValPhase2(i + ".twt.id"));
+					text = new StringBuffer(Tune2GeneralUtils.getPropertyValPhase2(i + ".twt.text"));
+					id = new StringBuffer(Tune2GeneralUtils.getPropertyValPhase2(i + ".twt.id"));
 				} catch (Exception e) {
 					e.printStackTrace();
 					log.error("tweets could not be loaded");
 				}
-				//System.out.println(id);
 				Tweet twt = new Tweet(id.toString(), StringEscapeUtils.unescapeHtml4(text.toString()));
 				tweetList.add(twt);
 			}
-			System.out.println("Total tweets-" + tweetList.size());
+			LOG.info("Total tweets-" + tweetList.size());
 			// relevant options
 			relevantOptions.add(RELEVANT_OPT);
 			relevantOptions.add(NON_RELEVANT_OPT);
@@ -176,119 +173,112 @@ public class Phase2Bean implements Serializable {
 			sentiOptions.add(NEGATIVE);
 			this.setTweetText(tweetList.get(0).getText());
 			this.setTweetId(tweetList.get(0).getId().toString());
-			try {
-				display();
-			} catch (IOException e) {
-				e.printStackTrace();
-				log.error("exception at display()");
-			}
+			display();
 		}
 	}
 
 	/**
-	 * @throws IOException
 	 * @throws Exception
 	 *             The method contains the logic for navigation and all UI related
 	 *             stuff
 	 */
-	public void display() throws IOException {
-		//System.out.println(relevant + factual + sentiment+counter);
-
-		if (relevant == null && counter > 0) {
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-					"Please mark the tweet as \"Relevant\" or \"Irrelevant\" then click on Next");
-			FacesContext.getCurrentInstance().addMessage("", fm);
-			return;
-		}
-
-		if (relevant != null) {
-
-			if (relevant.equals(RELEVANT_OPT) && factual == null) {
+	public void display() {
+		try {
+			if (relevant == null && counter > 0) {
 				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-						"Please mark the tweet as \"Factual\" or \"Non-Factual\" then click on Next");
+						"Please mark the tweet as \"Relevant\" or \"Irrelevant\" then click on Next");
 				FacesContext.getCurrentInstance().addMessage("", fm);
 				return;
 			}
 
-			if (relevant.equals(RELEVANT_OPT) && (NON_FACTUAL_OPT).equals(factual) && sentiment == null) {
-				FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-						"Please mark the tweet's sentiment as \"Positive\" or \"Negative\" then click on Next");
-				FacesContext.getCurrentInstance().addMessage("", fm);
-				return;
+			if (relevant != null) {
+
+				if (relevant.equals(RELEVANT_OPT) && factual == null) {
+					FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+							"Please mark the tweet as \"Factual\" or \"Non-Factual\" then click on Next");
+					FacesContext.getCurrentInstance().addMessage("", fm);
+					return;
+				}
+
+				if (relevant.equals(RELEVANT_OPT) && (NON_FACTUAL_OPT).equals(factual) && sentiment == null) {
+					FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+							"Please mark the tweet's sentiment as \"Positive\" or \"Negative\" then click on Next");
+					FacesContext.getCurrentInstance().addMessage("", fm);
+					return;
+				}
+
+				Tweet annotatedTwt = new Tweet(tweetId, tweetText);
+				annotatedTwt.setRelevant(relevant.equals(RELEVANT_OPT) ? YES : NO);
+				if (relevant.equals(RELEVANT_OPT))
+					annotatedTwt.setFactual(FACTUAL_OPT.equals(factual) ? YES : NO);
+				if ((NON_FACTUAL_OPT).equals(factual))
+					annotatedTwt.setSentiment(sentiment);
+
+				annotatedTweetList.add(annotatedTwt);
+
+				/**
+				 * check if mid-break question has been reached and mid-break not given. Then
+				 * give break
+				 */
+				if (counter == MID_BREAK_TWEET_NO && !midBreak) {
+					// show only break pic
+					image = MID_BREAK_JPG;
+					midBreak = true;
+					// log for question ans b4 mid-break
+					updateTime(false, annotatedTwt);
+					return;
+
+				}
+
+				/**
+				 * check if mid-break question has been reached and mid-break given. Then
+				 * proceed to next q
+				 */
+
+				if (counter == MID_BREAK_TWEET_NO && midBreak) {
+					midBreak = false;
+					// log mid-break time and update time var
+					updateTime(true, null);
+					// to prevent relaxation phase starting again!
+					RELAX_TIME = System.currentTimeMillis();
+				} else {
+					// log for Q
+					updateTime(false, null);
+				}
+
+				// start relaxation period
+				if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD && (counter < MAX_TWEET_NO)) {
+					provideRelaxation();
+				}
 			}
 
-			Tweet annotatedTwt = new Tweet(tweetId, tweetText);
-			annotatedTwt.setRelevant(relevant.equals(RELEVANT_OPT) ? YES : NO);
-			if (relevant.equals(RELEVANT_OPT))
-				annotatedTwt.setFactual(FACTUAL_OPT.equals(factual) ? YES : NO);
-			if ((NON_FACTUAL_OPT).equals(factual))
-				annotatedTwt.setSentiment(sentiment);
+			// if max no of questions reached write to file and display thanku page
+			if (counter == MAX_TWEET_NO) {
+				counter = 0;
+				writeToFile(QUIZ_LOG.toString());
+				FacesContext.getCurrentInstance().getExternalContext().redirect(THANK_U_PAGE);
+				showQuiz = false;
+				twtCtr++;
+				String twtCtrFileName = Tune2GeneralUtils.getPropertyValPhase2("file.log.loc") + "twtCtr";
 
-			annotatedTweetList.add(annotatedTwt);
-			//System.out.println(annotatedTwt.toString());
+				Files.write(Paths.get(twtCtrFileName), String.valueOf(twtCtr).getBytes());
 
-			/**
-			 * check if mid-break question has been reached and mid-break not given. Then
-			 * give break
-			 */
-			if (counter == MID_BREAK_TWEET_NO && !midBreak) {
-				// show only break pic
-				// imagePresent = true;
-				image = MID_BREAK_JPG;
-				midBreak = true;
-				tweetId = "";
-				// log for question ans b4 mid-break
-				updateTime(false);
-				return;
-
-			}
-
-			/**
-			 * check if mid-break question has been reached and mid-break given. Then
-			 * proceed to next q
-			 */
-
-			if (counter == MID_BREAK_TWEET_NO && midBreak) {
-				// log mid-break time and update time var
-				updateTime(true);
-				// to prevent relaxation phase starting again!
-				RELAX_TIME = System.currentTimeMillis();
 			} else {
-				// log for Q
-				updateTime(false);
+				// init the next question and options
+				clearcurrentTweetInfo();
+				Tweet tweetDTO = tweetList.get(counter);
+				tweetId = String.valueOf(tweetDTO.getId());
+				tweetText = tweetDTO.getText();
+				counter++;
 			}
 
-			// start relaxation period
-			if ((System.currentTimeMillis() - RELAX_TIME) >= Q_A_PERIOD && (counter < MAX_TWEET_NO)) {
-				provideRelaxation();
-			}
+			// new question timer starts
+			TIME = System.currentTimeMillis();
+			endDateTime = startDateTime;
+			startDateTime = new Date();
+		} catch (Exception e) {
+			log.error("exception at display " + e.getMessage());
 		}
-
-		// if max no of questions reached write to file and display thanku page
-		if (counter == MAX_TWEET_NO) {
-			counter = 0;
-			writeToFile(QUIZ_LOG.toString());
-			FacesContext.getCurrentInstance().getExternalContext().redirect(THANK_U_PAGE);
-			showQuiz = false;
-			twtCtr++;
-			String twtCtrFileName = FRGeneralUtils.getPropertyValPhase2("file.log.loc") + "twtCtr";
-
-			Files.write(Paths.get(twtCtrFileName), String.valueOf(twtCtr).getBytes());
-
-		} else {
-			// init the next question and options
-			clearcurrentTweetInfo();
-			Tweet tweetDTO = tweetList.get(counter);
-			tweetId = String.valueOf(tweetDTO.getId());
-			tweetText = tweetDTO.getText();
-			counter++;
-		}
-
-		// new question timer starts
-		TIME = System.currentTimeMillis();
-		endDateTime = startDateTime;
-		startDateTime = new Date();
-		//System.out.println(counter);
 
 	}
 
@@ -300,26 +290,37 @@ public class Phase2Bean implements Serializable {
 		sentiment = null;
 	}
 
-	private void updateTime(boolean relaxation) throws IOException {
-		//System.out.println(relAnnotateTime + " " + factAnnotateTime + " " + TIME);
+	private void updateTime(boolean relaxation, Tweet annotatedTwt) throws Exception {
+		if (relaxation) {
+			tweetId = null;
+			relevant = null;
+			factual = null;
+			sentiment = null;
+			image = null;
+		}
 		long start = TIME;
 		TIME = System.currentTimeMillis();
 		endDateTime = startDateTime;
 		startDateTime = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd hh:mm:ss a zzz");
 
 		String qType = relaxation ? "R" : "T";
-		Long relTime = relAnnotateTime == null ? null : (relAnnotateTime - start);
-		Long factTime = (factAnnotateTime != null && relAnnotateTime != null) ? (factAnnotateTime - relAnnotateTime)
+		Long relTime = (relAnnotateTime != null && relevant.equals(RELEVANT_OPT)) ? (relAnnotateTime - start) : null;
+		Long factTime = (factAnnotateTime != null && relevant.equals(RELEVANT_OPT))
+				? (factAnnotateTime - relAnnotateTime)
 				: null;
-		Long sentiTime = factAnnotateTime == null ? null : (TIME - factAnnotateTime);
+		Long sentiTime = (sentiment == null) ? null : (TIME - factAnnotateTime);
 
-		System.out.println(qType + "," + tweetId + "," + startDateTime + "," + endDateTime + "," + relevant + ","
-				+ relTime + "," + factual + "," + factTime + "," + sentiment + "," + sentiTime);
-		QUIZ_LOG.append(qType + "," + tweetId + "," + startDateTime + "," + endDateTime + "," + relevant + "," + relTime
-				+ "," + factual + "," + factTime + "," + sentiment + "," + sentiTime + "\n");
+		LOG.info(counter + ">" + qType + "," + tweetId + "," + ft.format(startDateTime) + ","
+				+ ft.format(endDateTime) + "," + relevant + "," + relTime + "," + factual + "," + factTime + ","
+				+ sentiment + "," + sentiTime + "," + (TIME - start));
+		QUIZ_LOG.append(qType + "," + tweetId + "," + ft.format(startDateTime) + "," + ft.format(endDateTime) + ","
+				+ relevant + "," + relTime + "," + factual + "," + factTime + "," + sentiment + "," + sentiTime + ","
+				+ (TIME - start) + "\n");
 
 		relAnnotateTime = null;
 		factAnnotateTime = null;
+		TIME = System.currentTimeMillis();
 
 	}
 
@@ -334,15 +335,15 @@ public class Phase2Bean implements Serializable {
 			data.concat("/");
 		}
 		File file = new File(
-				FRGeneralUtils.getPropertyValPhase2("file.log.loc") + "LOG_P2_" + System.currentTimeMillis());
+				Tune2GeneralUtils.getPropertyValPhase2("file.log.loc") + "LOG_P2_" + System.currentTimeMillis()+".txt");
 		FileUtils.writeStringToFile(file, data);
 
 	}
 
-	private void provideRelaxation() throws IOException {
-		int size = Integer.parseInt(FRGeneralUtils.getPropertyValPhase2("relax.gif.no"));
+	private void provideRelaxation() throws Exception {
+		int size = Integer.parseInt(Tune2GeneralUtils.getPropertyValPhase2("relax.gif.no"));
 
-		System.out.println("Relaxation GIF is :" + relaxationGif);
+		LOG.info("Relaxation GIF is :" + relaxationGif);
 		try {
 			Thread.sleep(RELAXATION_PERIOD);
 		} catch (InterruptedException e) {
@@ -350,43 +351,31 @@ public class Phase2Bean implements Serializable {
 		}
 		RELAX_TIME = System.currentTimeMillis();
 		// time update for relaxation
-		updateTime(true);
+		updateTime(true, null);
 		gifCounter = gifCounter > (size - 1) ? 1 : ++gifCounter;
 	}
 
 	/**
 	 * The method captures the relevance response given by the user
 	 */
-	@SuppressWarnings("deprecation")
 	public void captureRelevance() {
-		RequestContext context = RequestContext.getCurrentInstance();
-		// context.addCallbackParam("myRadVal", responseOption);
 		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
 		relAnnotateTime = System.currentTimeMillis();
-		//System.out.println(relevant);
 	}
 
 	/**
 	 * The method captures the sentiment response given by the user
 	 */
-	@SuppressWarnings("deprecation")
 	public void captureSentiment() {
-		RequestContext context = RequestContext.getCurrentInstance();
-		// context.addCallbackParam("myRadVal", responseOption);
 		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
-		//System.out.println(sentiment);
 	}
 
 	/**
 	 * The method captures the factual response given by the user
 	 */
-	@SuppressWarnings("deprecation")
 	public void captureFactual() {
-		RequestContext context = RequestContext.getCurrentInstance();
-		// context.addCallbackParam("myRadVal", responseOption);
 		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
 		factAnnotateTime = System.currentTimeMillis();
-		//System.out.println(factual);
 	}
 
 	public String getRelaxationPicFolder() {
