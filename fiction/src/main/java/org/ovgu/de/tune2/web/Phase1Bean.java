@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.ovgu.de.tune2.ui.Question;
-import org.ovgu.de.tune2.utils.Tune2GeneralUtils;
+import org.ovgu.de.tune2.utils.Utility;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -77,7 +77,7 @@ public class Phase1Bean implements Serializable {
 			LOG.info("Loading Questions and options !!! ");
 			showQuiz = true;
 			try {
-				relaxationPicFolder = Tune2GeneralUtils.getPropertyValPhase1("relax.gif.folder");
+				relaxationPicFolder = Utility.getPropertyValPhase1("relax.gif.folder");
 			} catch (IOException e2) {
 				e2.printStackTrace();
 				log.error("Relaxation gif not loaded!");
@@ -94,7 +94,7 @@ public class Phase1Bean implements Serializable {
 			gifCounter = 1;
 
 			try {
-				MAX_QUESTION_NO = Integer.parseInt(Tune2GeneralUtils.getPropertyValPhase1("question.no"));
+				MAX_QUESTION_NO = Integer.parseInt(Utility.getPropertyValPhase1("question.no"));
 			} catch (NumberFormatException | IOException e1) {
 				e1.printStackTrace();
 				log.error("MAX_QUESTION_NO not parsed!");
@@ -106,12 +106,12 @@ public class Phase1Bean implements Serializable {
 				String imagePath = null;
 				List<String> optionList = null;
 				try {
-					text = Tune2GeneralUtils.getPropertyValPhase1(i + ".q.text");
+					text = Utility.getPropertyValPhase1(i + ".q.text");
 					optionList = (List<String>) Arrays
-							.asList(Tune2GeneralUtils.getPropertyValPhase1(i + ".q.options").split("#"));
-					String img = Tune2GeneralUtils.getPropertyValPhase1(i + ".q.image");
+							.asList(Utility.getPropertyValPhase1(i + ".q.options").split("#"));
+					String img = Utility.getPropertyValPhase1(i + ".q.image");
 					imagePath = img.trim().length() > 1 ? "images/" + img : "";
-					isEasy = Tune2GeneralUtils.getPropertyValPhase1(i + ".q.type") == "e" ? true : false;
+					isEasy = Utility.getPropertyValPhase1(i + ".q.type") == "e" ? true : false;
 				} catch (Exception e) {
 					e.printStackTrace();
 					log.error("questions could not be loaded");
@@ -217,7 +217,7 @@ public class Phase1Bean implements Serializable {
 		startDateTime = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
 
-		String qType = relaxation ? "R" : Tune2GeneralUtils.getPropertyValPhase1(id + ".q.type");
+		String qType = relaxation ? "R" : Utility.getPropertyValPhase1(id + ".q.type");
 		System.out.println(qType + "," + id + "," + ft.format(startDateTime) + "," + ft.format(endDateTime) + ","
 				+ (TIME - prevTime));
 		QUIZ_LOG.append(qType + "," + id + "," + ft.format(startDateTime) + "," + ft.format(endDateTime) + ","
@@ -234,13 +234,13 @@ public class Phase1Bean implements Serializable {
 		if (!(data.endsWith("/") || data.endsWith("\\"))) {
 			data.concat("/");
 		}
-		File file = new File(Tune2GeneralUtils.getPropertyValPhase1("file.log.loc") + "LOG_P1_" + System.currentTimeMillis()+".txt");
+		File file = new File(Utility.getPropertyValPhase1("file.log.loc") + "LOG_P1_" + System.currentTimeMillis()+".txt");
 		FileUtils.writeStringToFile(file, data);
 
 	}
 
 	private void provideRelaxation() throws IOException {
-		int size = Integer.parseInt(Tune2GeneralUtils.getPropertyValPhase1("relax.gif.no"));
+		int size = Integer.parseInt(Utility.getPropertyValPhase1("relax.gif.no"));
 
 		System.out.println("Relaxation GIF is :" + relaxationGif);
 		try {

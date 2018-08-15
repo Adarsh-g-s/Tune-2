@@ -2,10 +2,12 @@ package org.ovgu.de.tune2.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,15 +21,15 @@ import org.apache.log4j.Logger;
 /**
  * This is utility class for file operations
  */
-public class Tune2FileOperationUtils {
+public class Utility {
 
-	private static Logger LOG = Logger.getLogger(Tune2FileOperationUtils.class);
+	private static Logger LOG = Logger.getLogger(Utility.class);
 
 	/**
 	 * @return
 	 * @throws IOException
-	 *             The method fetches file names present in the folder configured in the properties
-	 *             file
+	 *             The method fetches file names present in the folder configured in
+	 *             the properties file
 	 */
 	public static List<Path> getFileNames(String folderName) throws IOException {
 		try (Stream<Path> paths = Files.walk(Paths.get(folderName))) {
@@ -68,4 +70,33 @@ public class Tune2FileOperationUtils {
 		return "";
 	}
 
+	/**
+	 * @param propName
+	 * @return The method returns the property value associated wit the property
+	 *         name passed in the method, for phase1
+	 * @throws IOException
+	 */
+	public static String getPropertyValPhase1(String propName) throws IOException {
+		Properties prop = new Properties();
+
+		InputStream input = Utility.class.getClassLoader().getResourceAsStream(Constants.CONFIG_FILE_PHASE1);
+
+		prop.load(input);
+		return (prop.getProperty(propName));
+	}
+
+	/**
+	 * @param propName
+	 * @return The method returns the property value associated wit the property
+	 *         name passed in the method, for phase2
+	 * @throws IOException
+	 */
+	public static String getPropertyValPhase2(String propName) throws IOException {
+		Properties prop = new Properties();
+
+		InputStream input = Utility.class.getClassLoader().getResourceAsStream(Constants.CONFIG_FILE_PHASE2);
+
+		prop.load(input);
+		return (prop.getProperty(propName));
+	}
 }

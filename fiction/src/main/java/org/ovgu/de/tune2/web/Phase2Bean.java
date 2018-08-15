@@ -20,7 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.ovgu.de.tune2.ui.Tweet;
-import org.ovgu.de.tune2.utils.Tune2GeneralUtils;
+import org.ovgu.de.tune2.utils.Utility;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -95,7 +95,7 @@ public class Phase2Bean implements Serializable {
 			LOG.info("Loading Tweets !!! ");
 			showQuiz = true;
 			try {
-				relaxationPicFolder = Tune2GeneralUtils.getPropertyValPhase2("relax.gif.folder");
+				relaxationPicFolder = Utility.getPropertyValPhase2("relax.gif.folder");
 			} catch (IOException e2) {
 				e2.printStackTrace();
 				log.error("Relaxation gif not loaded!");
@@ -118,7 +118,7 @@ public class Phase2Bean implements Serializable {
 			// create file for tweet counter
 			try {
 				{
-					twtCtrFileName = Tune2GeneralUtils.getPropertyValPhase2("file.log.loc") + "twtCtr";
+					twtCtrFileName = Utility.getPropertyValPhase2("file.log.loc") + "twtCtr";
 					tfile = new File(twtCtrFileName);
 					tfile.createNewFile();
 				}
@@ -138,7 +138,7 @@ public class Phase2Bean implements Serializable {
 				} else {
 					twtCtr = 0;
 				}
-				MAX_TWEET_NO = Integer.parseInt(Tune2GeneralUtils.getPropertyValPhase2("tweet.no"));
+				MAX_TWEET_NO = Integer.parseInt(Utility.getPropertyValPhase2("tweet.no"));
 			} catch (NumberFormatException | IOException e1) {
 				e1.printStackTrace();
 				log.error("MAX_TWEET_NO not parsed!");
@@ -150,8 +150,8 @@ public class Phase2Bean implements Serializable {
 				StringBuffer text = null;
 				StringBuffer id = null;
 				try {
-					text = new StringBuffer(Tune2GeneralUtils.getPropertyValPhase2(i + ".twt.text"));
-					id = new StringBuffer(Tune2GeneralUtils.getPropertyValPhase2(i + ".twt.id"));
+					text = new StringBuffer(Utility.getPropertyValPhase2(i + ".twt.text"));
+					id = new StringBuffer(Utility.getPropertyValPhase2(i + ".twt.id"));
 				} catch (Exception e) {
 					e.printStackTrace();
 					log.error("tweets could not be loaded");
@@ -259,7 +259,7 @@ public class Phase2Bean implements Serializable {
 				FacesContext.getCurrentInstance().getExternalContext().redirect(THANK_U_PAGE);
 				showQuiz = false;
 				twtCtr++;
-				String twtCtrFileName = Tune2GeneralUtils.getPropertyValPhase2("file.log.loc") + "twtCtr";
+				String twtCtrFileName = Utility.getPropertyValPhase2("file.log.loc") + "twtCtr";
 
 				Files.write(Paths.get(twtCtrFileName), String.valueOf(twtCtr).getBytes());
 
@@ -335,13 +335,13 @@ public class Phase2Bean implements Serializable {
 			data.concat("/");
 		}
 		File file = new File(
-				Tune2GeneralUtils.getPropertyValPhase2("file.log.loc") + "LOG_P2_" + System.currentTimeMillis()+".txt");
+				Utility.getPropertyValPhase2("file.log.loc") + "LOG_P2_" + System.currentTimeMillis()+".txt");
 		FileUtils.writeStringToFile(file, data);
 
 	}
 
 	private void provideRelaxation() throws Exception {
-		int size = Integer.parseInt(Tune2GeneralUtils.getPropertyValPhase2("relax.gif.no"));
+		int size = Integer.parseInt(Utility.getPropertyValPhase2("relax.gif.no"));
 
 		LOG.info("Relaxation GIF is :" + relaxationGif);
 		try {
