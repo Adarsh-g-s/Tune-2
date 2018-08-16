@@ -66,7 +66,7 @@
 				<h:panelGroup id="btnPanlSenti">
 					<p:separator
 						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant' and !phase2Bean.midBreak}" />
-					<p:outputLabel value="If Relevant and Factual,then which label is more suitable? "
+					<p:outputLabel value="If Relevant and Non-Factual,then which label is more suitable? "
 						rendered="#{phase2Bean.showQuiz and phase2Bean.factual eq 'Non-factual' and phase2Bean.relevant eq 'Relevant' and !phase2Bean.midBreak}" />
 					<p:selectOneRadio id="senti" value="#{phase2Bean.sentiment}"
 						layout="responsive" columns="2"
