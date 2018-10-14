@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,11 @@ import org.ovgu.de.tune2.utils.Utility;
 @ManagedBean
 @ViewScoped
 public class Phase2Bean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final String GIF = ".jpg";
 
 	private static final long serialVersionUID = 462006850003220169L;
 
@@ -95,6 +101,7 @@ public class Phase2Bean implements Serializable {
 			showQuiz = true;
 			try {
 				relaxationPicFolder = Utility.getPropertyValPhase2("relax.gif.folder");
+			//System.out.println(relaxationPicFolder);
 			} catch (IOException e2) {
 				e2.printStackTrace();
 				log.error("Relaxation gif not loaded!");
@@ -158,6 +165,8 @@ public class Phase2Bean implements Serializable {
 				Tweet twt = new Tweet(id.toString(), StringEscapeUtils.unescapeHtml4(text.toString()));
 				tweetList.add(twt);
 			}
+			
+			Collections.shuffle(tweetList);
 			LOG.info("Total tweets-" + tweetList.size());
 			// relevant options
 			relevantOptions.add(RELEVANT_OPT);
@@ -358,7 +367,7 @@ public class Phase2Bean implements Serializable {
 	 * The method captures the relevance response given by the user
 	 */
 	public void captureRelevance() {
-		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
+		relaxationGif = relaxationPicFolder + "/" + gifCounter + GIF;
 		relAnnotateTime = System.currentTimeMillis();
 	}
 
@@ -366,14 +375,14 @@ public class Phase2Bean implements Serializable {
 	 * The method captures the sentiment response given by the user
 	 */
 	public void captureSentiment() {
-		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
+		relaxationGif = relaxationPicFolder + "/" + gifCounter + GIF;
 	}
 
 	/**
 	 * The method captures the factual response given by the user
 	 */
 	public void captureFactual() {
-		relaxationGif = relaxationPicFolder + "/" + gifCounter + ".gif";
+		relaxationGif = relaxationPicFolder + "/" + gifCounter + GIF;
 		factAnnotateTime = System.currentTimeMillis();
 	}
 

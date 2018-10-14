@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -120,6 +121,7 @@ public class Phase1Bean implements Serializable {
 				Question q = new Question(i, text, optionList, isEasy, imagePath);
 				questions.add(q);
 			}
+			Collections.shuffle(questions);
 			try {
 				display();
 			} catch (IOException e) {
