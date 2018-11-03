@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <tabs>
+  <Tab text="Pre-Process">
+         <content>
+            <fx:include fx:id="preProcess" source="Preprocess.fxml" />
+         </content></Tab>
+   <Tab text="Classifiers">
+         <content>
+            <fx:include fx:id="buildClassifier" source="BuildClassifier.fxml" />
+         </content></Tab>
+   <!--  <Tab text="Single User">
+         <content>
+            <fx:include fx:id="singleUser" source="SingleUser.fxml" />
+         </content></Tab>
+    <Tab text="Multi User">
+         <content>
+            <fx:include fx:id="multiUser" source="MultiUser.fxml" />
+         </content></Tab> -->
+     <Tab text="Settings">
+         <content>
+            <fx:include fx:id="settings" source="Settings.fxml" />
+         </content></Tab>
+  </tabs>
+</TabPane>

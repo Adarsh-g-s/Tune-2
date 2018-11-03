@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<AnchorPane fx:id="singleUser" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SingleUserController">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ccd2d7" height="194.0" layoutX="21.0" layoutY="9.0" stroke="BLACK" strokeType="INSIDE" width="430.0" />
+                  <Button fx:id="logFileBtn" layoutX="26.0" layoutY="53.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="30.0" prefWidth="146.0" text="Choose Log File" />
+                  <Button fx:id="edaBtn" disable="true" layoutX="276.0" layoutY="53.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="30.0" prefWidth="146.0" text="Choose EDA File" />
+                  <ComboBox fx:id="comboBox" disable="true" layoutX="31.0" layoutY="161.0" onAction="#comboAction" prefHeight="26.0" prefWidth="366.0" promptText="Choose Classifier" visible="false" />
+                  <Button fx:id="execute" disable="true" layoutX="161.0" layoutY="161.0" mnemonicParsing="false" onAction="#executeAction" prefHeight="19.0" prefWidth="130.0" text="Execute" />
+                  <TextArea fx:id="loggingTextOutput" editable="false" layoutX="16.0" layoutY="219.0" prefHeight="635.0" prefWidth="1179.0" />
+                  <Label fx:id="logFileName" alignment="CENTER" layoutX="26.0" layoutY="83.0" prefHeight="18.0" prefWidth="200.0" />
+                  <Label fx:id="edaFilename" alignment="CENTER" layoutX="226.0" layoutY="83.0" prefHeight="18.0" prefWidth="219.0" />
+                  <Line endX="329.5999755859375" endY="18.199989318847656" layoutX="119.0" layoutY="94.0" startX="-99.0" startY="18.199989318847656" stroke="#aa8a8a" />
+                  <Button layoutX="563.0" layoutY="859.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="73.0" text="Export" />
+                  <Label layoutX="26.0" layoutY="128.0" prefHeight="18.0" prefWidth="126.0" text="Choose Classifier" />
+                  <CheckComboBox fx:id="checkComboBox" accessibleRole="COMBO_BOX" disable="true" layoutX="172.0" layoutY="124.0" prefHeight="26.0" prefWidth="274.0" />
+               </children>
+            </AnchorPane>

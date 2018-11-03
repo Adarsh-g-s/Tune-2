@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" opacity="0.88" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.PreprocessController">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dff1f5" height="863.0" layoutX="14.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="690.0" />
+                  <Button layoutX="35.0" layoutY="99.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="157.0" text="Choose EDA File-1" />
+                  <Button layoutX="227.0" layoutY="207.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-3" />
+                  <Button layoutX="33.0" layoutY="207.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-3" />
+                  <Button layoutX="35.0" layoutY="157.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-2" />
+                  <Button layoutX="229.0" layoutY="99.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-1" />
+                  <Button layoutX="229.0" layoutY="157.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-2" />
+                  <Button layoutX="228.0" layoutY="265.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-4" />
+                  <Button layoutX="35.0" layoutY="265.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-4" />
+                  <Button layoutX="229.0" layoutY="323.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-5" />
+                  <Button layoutX="34.0" layoutY="323.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-5" />
+                  <Button layoutX="230.0" layoutY="385.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-6" />
+                  <Button layoutX="34.0" layoutY="385.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-6" />
+                  <Button layoutX="230.0" layoutY="442.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-7" />
+                  <Button layoutX="34.0" layoutY="442.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-7" />
+                  <Button layoutX="231.0" layoutY="494.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-8" />
+                  <Button layoutX="36.0" layoutY="494.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-8" />
+                  <Button layoutX="231.0" layoutY="610.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-10" />
+                  <Button layoutX="33.0" layoutY="610.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-10" />
+                  <Button layoutX="230.0" layoutY="553.0" mnemonicParsing="false" onAction="#logFileBtnAction" prefHeight="26.0" prefWidth="150.0" text="Choose Log File-9" />
+                  <Button layoutX="33.0" layoutY="553.0" mnemonicParsing="false" onAction="#edaBtnAction" prefHeight="26.0" prefWidth="158.0" text="Choose EDA File-9" />
+                  <Line endX="506.0" endY="1.9999923706054688" fill="BLACK" layoutX="199.0" layoutY="147.0" opacity="0.63" smooth="false" startX="-184.0" startY="1.9999923706054688" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="533.0" endY="9.599998474121094" fill="BLACK" layoutX="170.0" layoutY="194.0" opacity="0.63" smooth="false" startX="-154.60000610351562" startY="9.599998474121094" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="534.0" endY="16.20001220703125" fill="BLACK" layoutX="171.0" layoutY="365.0" opacity="0.63" smooth="false" startX="-156.0" startY="16.199996948242188" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="525.0" endY="17.199981689453125" fill="BLACK" layoutX="180.0" layoutY="302.0" opacity="0.63" smooth="false" startX="-165.0" startY="17.199996948242188" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="524.0" endY="15.800003051757812" fill="BLACK" layoutX="181.0" layoutY="248.0" opacity="0.63" smooth="false" startX="-166.0" startY="15.800003051757812" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="526.0" endY="17.800018310546875" fill="BLACK" layoutX="179.0" layoutY="470.0" opacity="0.63" smooth="false" startX="-164.0" startY="17.800018310546875" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="531.0" endY="18.600006103515625" fill="BLACK" layoutX="173.0" layoutY="418.0" opacity="0.63" smooth="false" startX="-159.0" startY="18.600006103515625" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="515.0" endY="17.20001220703125" fill="BLACK" layoutX="188.0" layoutY="815.0" opacity="0.63" smooth="false" startX="-175.0" startY="17.20001220703125" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="514.0" endY="16.20001220703125" fill="BLACK" layoutX="190.0" layoutY="534.0" opacity="0.63" smooth="false" startX="-176.0" startY="16.20001220703125" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="516.0" endY="9.600006103515625" fill="BLACK" layoutX="188.0" layoutY="656.0" opacity="0.63" smooth="false" startX="-174.0" startY="9.600006103515625" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <CheckBox fx:id="checkAfter1min1" layoutX="425.0" layoutY="103.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min9" layoutX="425.0" layoutY="557.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min8" layoutX="425.0" layoutY="498.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min7" layoutX="425.0" layoutY="441.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min6" layoutX="425.0" layoutY="389.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min5" layoutX="425.0" layoutY="327.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min4" layoutX="425.0" layoutY="269.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min3" layoutX="425.0" layoutY="211.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min2" layoutX="425.0" layoutY="161.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <CheckBox fx:id="checkAfter1min10" layoutX="425.0" layoutY="614.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="158.0" text="Start After 1min" />
+                  <TextField fx:id="arffName" alignment="CENTER" layoutX="138.0" layoutY="678.0" prefHeight="26.0" prefWidth="379.0" />
+                  <Label layoutX="20.0" layoutY="683.0" prefHeight="18.0" prefWidth="104.0" text="Arff File Name" />
+                  <Line endX="514.0" endY="9.5999755859375" fill="BLACK" layoutX="190.0" layoutY="704.0" opacity="0.63" smooth="false" startX="-174.0" startY="9.600006103515625" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Button layoutX="567.0" layoutY="840.0" mnemonicParsing="false" onAction="#executeAction" prefHeight="26.0" prefWidth="130.0" text="Execute" />
+                  <!-- <RadioButton fx:id="phase1" layoutX="124.0" layoutY="725.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="120.0" text="Phase-1" />
+                  <RadioButton fx:id="phase2" layoutX="274.0" layoutY="725.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="120.0" text="Phase-2" />
+                  <Label layoutX="16.0" layoutY="725.0" prefHeight="18.0" prefWidth="104.0" text="Choose Phase" /> -->
+                  <Line endX="514.0" endY="9.5999755859375" fill="BLACK" layoutX="190.0" layoutY="747.0" opacity="0.63" smooth="false" startX="-174.0" startY="9.600006103515625" stroke="#aaa4a4" strokeDashOffset="50.0" />
+                  <Line endX="-96.800048828125" endY="757.0" layoutX="808.0" layoutY="143.0" startX="-96.800048828125" startY="-138.0" />
+                  <TextArea fx:id="multiLoggingTextOutput" layoutX="719.0" layoutY="25.0" prefHeight="850.0" prefWidth="472.0" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="907.0" layoutY="5.0" prefHeight="18.0" prefWidth="122.0" text="LOGS" textFill="#da0d0d" />
+      <Line endX="506.0" endY="1.9999923706054688" fill="BLACK" layoutX="199.0" layoutY="84.0" opacity="0.63" smooth="false" startX="-184.0" startY="1.9999923706054688" stroke="#aaa4a4" strokeDashOffset="50.0" />
+      <Label alignment="CENTER" layoutX="36.0" layoutY="61.0" prefHeight="18.0" prefWidth="130.0" text="EDA BINARY" textFill="RED" />
+      <Label alignment="CENTER" layoutX="220.0" layoutY="61.0" prefHeight="18.0" prefWidth="130.0" text="LOG FILE" textFill="RED" />
+      <Label alignment="CENTER" layoutX="374.0" layoutY="61.0" prefHeight="18.0" prefWidth="130.0" text="DELAY" textFill="RED" />
+      <CheckBox fx:id="phase1" layoutX="138.0" layoutY="729.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="114.0" text="Phase-1" />
+      <CheckBox fx:id="phase2" layoutX="291.0" layoutY="730.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="122.0" text="Phase-2" />
+      <Label layoutX="20.0" layoutY="729.0" prefHeight="18.0" prefWidth="84.0" text="Phases" />
+               </children>
+               </AnchorPane>

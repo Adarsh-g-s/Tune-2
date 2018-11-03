@@ -1,0 +1,25 @@
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dff1f5" height="553.0" layoutX="8.0" layoutY="7.0" stroke="BLACK" strokeType="INSIDE" width="782.0" />
+                  <TextField alignment="CENTER" layoutX="179.0" layoutY="14.0" prefHeight="26.0" prefWidth="227.0" />
+                  <Line endX="-7.6000213623046875" endY="453.0" layoutX="163.0" layoutY="107.0" startX="-7.6000213623046875" startY="-100.0" stroke="#c4c4c4" strokeDashOffset="95.0" />
+                  <Label layoutX="25.0" layoutY="19.0" text="Classifier Location" />
+                  <Line endX="682.0" layoutX="108.0" layoutY="47.0" startX="-100.0" strokeDashOffset="50.0" strokeLineJoin="ROUND" />
+                  <TextField alignment="CENTER" layoutX="179.0" layoutY="60.0" prefHeight="26.0" prefWidth="227.0" />
+                  <Label layoutX="25.0" layoutY="64.0" text="Classifiers" />
+                  <Line endX="682.0" layoutX="108.0" layoutY="93.0" startX="-100.0" strokeDashOffset="50.0" strokeLineJoin="ROUND" />
+                  <Button layoutX="367.0" layoutY="528.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="77.0" text="Save" />
+               </children>
+            </AnchorPane>
